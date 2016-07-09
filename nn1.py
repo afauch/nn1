@@ -5,10 +5,34 @@ from scipy import optimize
 from pylab import *
 
 # Step 0: Bring in data from csv
+with open('train.csv') as csvfile:
+	reader = csv.reader(csvfile, delimiter=',')
+
+	col_hrs_sleep = []
+	col_to_dos = []
+	col_mood = []
+
+	# reader is an iterable, not a sequence,
+	# so to skip first line, we use next()
+	next(reader)
+	# now we can loop and combine our columns
+	for row in reader:
+		hrs_sleep = row[0]
+		to_dos = row[1]
+		mood = row[2]
+
+		col_hrs_sleep.append(hrs_sleep)
+		col_to_dos.append(to_dos)
+		col_mood.append(mood)
+
+	print(col_hrs_sleep)
+	print(col_to_dos)
+	print(col_mood)
 
 # Step 1
 # Create array of data
 # x stands for inputs
+
 X = np.array(([8,.8],[8,1],[8,.4],[4,.6],[5,.6],[2,.2],[4,1]), dtype=float)
 y = np.array(([9],[9],[6],[5],[4],[2],[8]), dtype=float)
 # print X
