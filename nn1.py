@@ -26,6 +26,7 @@ with open('train.csv') as csvfile:
 		col_y.append([mood])
 		#col_mood.append(mood)
 
+	print '\n Source Data: \n'
 	print(col_X)
 	print(col_y)
 
@@ -33,20 +34,25 @@ with open('train.csv') as csvfile:
 # Create array of data
 # x stands for inputs
 
-X = np.asarray(col_X, dtype=float)
-y = np.asarray(col_y, dtype=float)
+unscaled_X = np.asarray(col_X, dtype=float)
+unscaled_y = np.asarray(col_y, dtype=float)
 
-print X
-print y
+print '\n Array Data: \n'
+print unscaled_X
+print unscaled_y
+print '\n'
 
 # Step 2
 # Scale data (so neural net can compare apples to apples)
 # i.e. divide by the maximum value for each dimension
-X = X/np.amax(X, axis=0)
-y = y/10 # Max mood is 10
 
+X = unscaled_X/np.amax(unscaled_X, axis=0)
+y = unscaled_y/10 # Max mood is 10
+
+print '\n Scaled Data: \n'
 print X
 print y
+print '\n'
 
 # Step 3 - Build neural net
 # i.e 2 neurons w/ 3 hidden layers
@@ -68,7 +74,8 @@ class Neural_Network(object):
 
 	# Use matrices to pass multiple inputs at once
 	def forward(self, X):
-		#Propagate inputs through network
+		# NOTE : Data must be scaled BEFORE entering network
+		# Propagate inputs through network
 		# Use .dot for matrix multiplication
 		self.z2 = np.dot(X, self.W1) #multiply X (original values) times W1
 		self.a2 = self.sigmoid(self.z2) #apply sigmoid activation function to hidden neurons
@@ -148,7 +155,7 @@ class trainer(object):
         
         params0 = self.N.getParams()
 
-        options = {'maxiter': 200, 'disp' : True}
+        options = {'maxiter': 1200, 'disp' : True}
         _res = optimize.minimize(self.costFunctionWrapper, params0, jac=True, method='BFGS', \
                                  args=(X, y), options=options, callback=self.callbackF)
 
@@ -224,6 +231,21 @@ T.train(X, y)
 print NN.forward(X)
 print y
 
+usr_hrs_sleep = float(input('Hours of Sleep? '))
+usr_to_dos = float(input('# To Do\'s Completed? (Program will convert to percent of 5) '))
+
+usr_to_dos = usr_to_dos/5 # scale to dos
+xHat = np.array(([usr_hrs_sleep, usr_to_dos]), dtype=float)
+
+# scale data
+xHat = xHat/np.amax(unscaled_X, axis=0)
+
+#tempMax = np.amax[X, axis=0]
+print('Maximum of X is \n')
+print (np.amax(unscaled_X))
+print(xHat)
+
+print NN.forward(xHat)
 
 # Avoiding overfitting
 
