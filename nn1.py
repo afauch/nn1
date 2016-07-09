@@ -8,9 +8,8 @@ from pylab import *
 with open('train.csv') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',')
 
-	col_hrs_sleep = []
-	col_to_dos = []
-	col_mood = []
+	col_X = []
+	col_y = []
 
 	# reader is an iterable, not a sequence,
 	# so to skip first line, we use next()
@@ -21,22 +20,24 @@ with open('train.csv') as csvfile:
 		to_dos = row[1]
 		mood = row[2]
 
-		col_hrs_sleep.append(hrs_sleep)
-		col_to_dos.append(to_dos)
-		col_mood.append(mood)
+		#col_hrs_sleep.append(hrs_sleep)
+		#col_to_dos.append(to_dos)
+		col_X.append([hrs_sleep,to_dos])
+		col_y.append([mood])
+		#col_mood.append(mood)
 
-	print(col_hrs_sleep)
-	print(col_to_dos)
-	print(col_mood)
+	print(col_X)
+	print(col_y)
 
 # Step 1
 # Create array of data
 # x stands for inputs
 
-X = np.array(([8,.8],[8,1],[8,.4],[4,.6],[5,.6],[2,.2],[4,1]), dtype=float)
-y = np.array(([9],[9],[6],[5],[4],[2],[8]), dtype=float)
-# print X
-# print y
+X = np.asarray(col_X, dtype=float)
+y = np.asarray(col_y, dtype=float)
+
+print X
+print y
 
 # Step 2
 # Scale data (so neural net can compare apples to apples)
